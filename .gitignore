@@ -43,3 +43,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Claves privadas - NO subir al repositorio
+assets/certs/server_key.pem
+assets/certs/evil_key.pem
+assets/certs/cert.conf
+server.js
