@@ -1,9 +1,10 @@
 // lib/network/api_client.dart
-// lib/network/api_client.dart
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/services.dart';
+import 'token_interceptor.dart';
+
 class ApiClient {
   static Dio? _instance;
 
@@ -42,6 +43,9 @@ class ApiClient {
         },
       ),
     )..httpClientAdapter = adapter;
+
+    // Agregar TokenInterceptor para manejo de autenticación
+    dio.interceptors.add(TokenInterceptor());
 
     // Interceptor para logging (solo en debug)
     assert(() {
