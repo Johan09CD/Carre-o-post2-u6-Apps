@@ -1,6 +1,7 @@
 // lib/screens/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../network/api_client.dart';
 import '../network/security_error_handler.dart';
 
@@ -14,6 +15,26 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String _estadoConexion = 'Sin intentos de conexión';
   bool _cargando = false;
+
+  final _storage = const FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  );
+
+  Future<void> _guardarToken() async {
+    await _storage.write(
+      key: 'access_token',
+      value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test_token_bancasegura',
+    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Token guardado correctamente ✓'),
+          backgroundColor: Colors.green.shade700,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
 
   Future<void> _probarConexion() async {
     setState(() {
@@ -96,6 +117,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
+              onPressed: _guardarToken,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green.shade700,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: const Text(
+                'Guardar Token de Prueba',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
               onPressed: _cargando ? null : _probarConexion,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue.shade800,
@@ -104,7 +138,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: _cargando
                   ? const CircularProgressIndicator(color: Colors.white)
-                  : const Text('Probar conexión', style: TextStyle(fontSize: 16)),
+                  : const Text(
+                'Probar conexión',
+                style: TextStyle(fontSize: 16),
+              ),
             ),
           ],
         ),

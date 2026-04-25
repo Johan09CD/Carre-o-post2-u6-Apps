@@ -34,7 +34,7 @@ class ApiClient {
 
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.bancasegura.test',
+          baseUrl: 'https://10.0.2.2:8443',
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 30),
         headers: {
